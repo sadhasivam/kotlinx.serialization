@@ -25,11 +25,7 @@ public abstract class AbstractDecoder : Decoder, CompositeDecoder {
 
     override fun decodeNotNullMark(): Boolean = true
     override fun decodeNull(): Nothing? = null
-    override fun decodeUnit() {
-        val descriptor = UnitSerializer().descriptor
-        val reader = beginStructure(descriptor)
-        reader.endStructure(descriptor)
-    }
+    override fun decodeUnit() = UnitSerializer().deserialize(this)
 
     override fun decodeBoolean(): Boolean = decodeValue() as Boolean
     override fun decodeByte(): Byte = decodeValue() as Byte

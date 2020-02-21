@@ -166,7 +166,8 @@ public constructor(
     public companion object Default : StringFormat {
         private const val message =
             "Top-level JSON instances are deprecated for removal in the favour of user-configured one. " +
-                    "You can either use a Json top-level object or configure your own instance  via 'Json {}' builder-like constructor"
+                    "You can either use a Json top-level object, configure your own instance  via 'Json {}' builder-like constructor, " +
+                    "'Json(JsonConfiguration)' constructor or by tweaking stable configuration 'Json(JsonConfiguration.Stable.copy(prettyPrint = true))'"
 
         @UnstableDefault
         @Deprecated(message = message, level = DeprecationLevel.WARNING)

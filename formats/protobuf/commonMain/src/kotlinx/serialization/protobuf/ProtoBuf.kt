@@ -511,7 +511,7 @@ public class ProtoBuf(
         }
     }
 
-    companion object Default : BinaryFormat {
+    companion object Default : BinaryFormat by ProtoBuf() {
         public override val context: SerialModule get() = plain.context
 
         // todo: make more memory-efficient
@@ -535,9 +535,6 @@ public class ProtoBuf(
             level = DeprecationLevel.WARNING
         )
         public val plain = ProtoBuf()
-
-        override fun <T> dump(serializer: SerializationStrategy<T>, value: T): ByteArray = plain.dump(serializer, value)
-        override fun <T> load(deserializer: DeserializationStrategy<T>, bytes: ByteArray): T = plain.load(deserializer, bytes)
     }
 
     override fun <T> dump(serializer: SerializationStrategy<T>, value: T): ByteArray {

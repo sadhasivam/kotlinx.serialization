@@ -207,10 +207,9 @@ public inline fun <reified T> SerialDescriptorBuilder.setDescriptor(): SerialDes
  * Creates a [List] out of a child descriptors retrieved via [SerialDescriptor.getElementDescriptor].
  *
  * Size of a list is equal to [SerialDescriptor.elementsCount].
- * TODO revisit
  */
 public fun SerialDescriptor.elementDescriptors(): List<SerialDescriptor> {
-    return List(elementsCount) { getElementDescriptor(it) }
+    return List(elementsCount) { getElementDescriptor(it) } // TODO revisit
 }
 
 /**

@@ -16,7 +16,7 @@ class KeyValueSerializersTest : JsonTestBase() {
         testPair(
             Pair(42, Pair("a", "b")),
             Int.serializer(),
-            PairSerializer(),
+            serializer(),
             useStreaming,
             """{"first":42,"second":{"first":"a","second":"b"}}"""
         )
@@ -29,28 +29,18 @@ class KeyValueSerializersTest : JsonTestBase() {
         )
     }
 
-    private inline fun <reified K, reified V> testPair(
+    private fun <K, V> testPair(
         pairInstance: Pair<K, V>,
         kSerializer: KSerializer<K>,
         vSerializer: KSerializer<V>,
         useStreaming: Boolean,
         expectedJson: String
     ) {
-        run {
-            val serializer = PairSerializer(kSerializer, vSerializer)
-            val json = default.stringify(serializer, pairInstance, useStreaming)
-            assertEquals(expectedJson, json)
-            val pair = default.parse(serializer, json, useStreaming)
-            assertEquals(pairInstance, pair)
-        }
-
-        run {
-            val serializer = PairSerializer<K, V>()
-            val json = default.stringify(serializer, pairInstance, useStreaming)
-            assertEquals(expectedJson, json)
-            val pair = default.parse(serializer, json, useStreaming)
-            assertEquals(pairInstance, pair)
-        }
+        val serializer = PairSerializer(kSerializer, vSerializer)
+        val json = default.stringify(serializer, pairInstance, useStreaming)
+        assertEquals(expectedJson, json)
+        val pair = default.parse(serializer, json, useStreaming)
+        assertEquals(pairInstance, pair)
     }
 
     @Test
@@ -67,7 +57,7 @@ class KeyValueSerializersTest : JsonTestBase() {
         testTriple(
             Triple(42, Triple(42, "f", 'c'), "42"),
             Int.serializer(),
-            TripleSerializer(),
+            serializer(),
             String.serializer(),
             useStreaming,
             """{"first":42,"second":{"first":42,"second":"f","third":"c"},"third":"42"}"""
@@ -83,7 +73,7 @@ class KeyValueSerializersTest : JsonTestBase() {
         )
     }
 
-    private inline fun <reified A, reified B, reified C> testTriple(
+    private fun  <A, B, C> testTriple(
         tripleInstance: Triple<A, B, C>,
         aSerializer: KSerializer<A>,
         bSerializer: KSerializer<B>,
@@ -91,21 +81,11 @@ class KeyValueSerializersTest : JsonTestBase() {
         useStreaming: Boolean,
         expectedJson: String
     ) {
-        run {
-            val serializer = TripleSerializer(aSerializer, bSerializer, cSerializer)
-            val json = default.stringify(serializer, tripleInstance, useStreaming)
-            assertEquals(expectedJson, json)
-            val triple = default.parse(serializer, json, useStreaming)
-            assertEquals(tripleInstance, triple)
-        }
-
-        run {
-            val serializer = TripleSerializer<A, B, C>()
-            val json = default.stringify(serializer, tripleInstance, useStreaming)
-            assertEquals(expectedJson, json)
-            val triple = default.parse(serializer, json, useStreaming)
-            assertEquals(tripleInstance, triple)
-        }
+        val serializer = TripleSerializer(aSerializer, bSerializer, cSerializer)
+        val json = default.stringify(serializer, tripleInstance, useStreaming)
+        assertEquals(expectedJson, json)
+        val triple = default.parse(serializer, json, useStreaming)
+        assertEquals(tripleInstance, triple)
     }
 
     class Entry<K, V>(override val key: K, override val value: V) : Map.Entry<K, V> {
@@ -150,20 +130,10 @@ class KeyValueSerializersTest : JsonTestBase() {
         useStreaming: Boolean,
         expectedJson: String
     ) {
-        run {
-            val serializer = MapEntrySerializer(kSerializer, vSerializer)
-            val json = default.stringify(serializer, entryInstance, useStreaming)
-            assertEquals(expectedJson, json)
-            val entry = default.parse(serializer, json, useStreaming)
-            assertEquals(entryInstance, entry)
-        }
-
-        run {
-            val serializer = MapEntrySerializer<K, V>()
-            val json = default.stringify(serializer, entryInstance, useStreaming)
-            assertEquals(expectedJson, json)
-            val entry = default.parse(serializer, json, useStreaming)
-            assertEquals(entryInstance, entry)
-        }
+        val serializer = MapEntrySerializer(kSerializer, vSerializer)
+        val json = default.stringify(serializer, entryInstance, useStreaming)
+        assertEquals(expectedJson, json)
+        val entry = default.parse(serializer, json, useStreaming)
+        assertEquals(entryInstance, entry)
     }
 }

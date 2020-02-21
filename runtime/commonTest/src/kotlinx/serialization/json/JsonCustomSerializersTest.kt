@@ -335,7 +335,7 @@ class JsonCustomSerializersTest : JsonTestBase() {
     @Test
     fun testMapBuiltinsTest() = parametrizedTest { useStreaming ->
         val map = mapOf(1 to "1", 2 to "2")
-        val serial =  MapSerializer<Int, String>()
+        val serial =  serializer<Map<Int, String>>()
         val s = Json { unquoted = true }.stringify(serial, map, useStreaming)
         assertEquals("{1:1,2:2}", s)
     }
