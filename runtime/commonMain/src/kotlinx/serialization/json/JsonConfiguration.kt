@@ -17,11 +17,11 @@ import kotlin.jvm.*
  * * [ignoreUnknownKeys] ignores encounters of unknown properties in the input JSON.
  *
  * * [isLenient] removes JSON specification restriction (RFC-4627) and makes parser
- *   more liberal to the malformed input. In lenient modes quoted string literals an unquoted
- *   string literals are allowed.
+ *   more liberal to the malformed input. In lenient modes quoted string literals, unquoted
+ *   string literals and special floating-point values are allowed
  *
  *  * [serializeSpecialFloatingPointValues] removes JSON specification restriction on
- *    special floating point values such as `NaN` and `Infinity` and enables their
+ *    special floating-point values such as `NaN` and `Infinity` and enables their
  *    serialization. When enabling it, please assure that the receiving party will be
  *    able to parse these special value.
  *
@@ -49,7 +49,7 @@ public data class JsonConfiguration @UnstableDefault constructor(
     internal val encodeDefaults: Boolean = true,
     internal val ignoreUnknownKeys: Boolean = false,
     internal val isLenient: Boolean = false,
-    internal val serializeSpecialFloatingPointValues: Boolean = false,
+    private val serializeSpecialFloatingPointValues: Boolean = false,
     internal val allowStructuredMapKeys: Boolean = false,
     internal val prettyPrint: Boolean = false,
     internal val unquotedPrint: Boolean = false,
@@ -59,6 +59,10 @@ public data class JsonConfiguration @UnstableDefault constructor(
     @Deprecated(message = "Custom update modes are not fully supported", level = DeprecationLevel.WARNING)
     internal val updateMode: UpdateMode = UpdateMode.OVERWRITE
 ) {
+
+    @JvmField
+    internal val serializeSpecialFp = serializeSpecialFloatingPointValues || isLenient
+
     init {
         if (useArrayPolymorphism) require(classDiscriminator == defaultDiscriminator) {
             "Class discriminator should not be specified when array polymorphism is specified"
@@ -67,6 +71,7 @@ public data class JsonConfiguration @UnstableDefault constructor(
         if (!prettyPrint) require(indent == defaultIndent) {
             "Indent should not be specified when default printing mode is used"
         }
+
     }
 
     companion object {
